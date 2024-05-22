@@ -17,6 +17,9 @@ const Dashboard = () => {
   const accessToken = localStorage.getItem("access-token");
   checkTokenExp(accessToken);
 
+  const userRole = localStorage.getItem("role");
+  const currentRole = userRole;
+
   return (
     <>
       <div>
@@ -24,10 +27,15 @@ const Dashboard = () => {
           <div className="mb-3">
             <Row>
               <Col span={24}>
-                <DemoLine />
+                
+                  <DemoLine />
+                
               </Col>
             </Row>
           </div>
+          {currentRole === "professionnel" ? (
+          <></>
+          ) : (
           <div>
             <Row gutter={[30, 30]}>
               <Col sm={24} md={24} lg={12} span={24}>
@@ -43,6 +51,7 @@ const Dashboard = () => {
               </Col>
             </Row>
           </div>
+        )}
         </div>
       </div>
     </>

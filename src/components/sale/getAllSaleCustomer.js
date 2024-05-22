@@ -19,7 +19,6 @@ import { CSVLink } from "react-csv";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllSale } from "../../redux/actions/sale/getSaleAction";
 import { loadAllStaff } from "../../redux/actions/user/getStaffAction";
-import DashboardCard from "../Card/DashboardCard";
 import SaleReportPrint from "../Invoice/SaleReport";
 import PageTitle from "../page-header/PageHeader";
 import DueClientNotification from "../notification/DueClientNotification";
@@ -347,11 +346,7 @@ const GetAllSale = (props) => {
               </Form>
             </div>
           </div>
-          <DashboardCard
-            information={total?._sum}
-            count={total?._count}
-            isCustomer={true}
-          />
+                   
           <br />
           <div>
             <div>

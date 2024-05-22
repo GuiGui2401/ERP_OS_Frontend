@@ -7,9 +7,11 @@ import { loadDashboardData } from "../../../redux/actions/dashboard/getDashboard
 import { loadAllPurchase } from "../../../redux/actions/purchase/getPurchaseAction";
 import { loadAllSale } from "../../../redux/actions/sale/getSaleAction";
 import NewDashboardCard from "../../Card/Dashboard/NewDashboardCard";
+import DashboardCard from "../../Card/DashboardCard";
 import Loader from "../../loader/loader";
 import NotificationIcon from "../../notification/NotificationIcon";
 import DueClientNotification from "../../notification/DueClientNotification";
+import getPermissions from "../../../utils/getPermissions";
 
 const DemoLine = () => {
   const [list, setList] = useState([]);
@@ -17,6 +19,13 @@ const DemoLine = () => {
 
   const productsList = useSelector((state) => state.products.list);
   const Clientlist = useSelector((state) => state.sales.list);
+
+  const permissions = getPermissions();
+  const hasPermission = (item) => {
+    return permissions?.includes(item ? item : "");
+  };
+
+  const total = useSelector((state) => state.sales.total);
 
   useEffect(() => {
     setList(productsList);
@@ -29,6 +38,7 @@ const DemoLine = () => {
   const dispatch = useDispatch();
 
   const data = useSelector((state) => state.dashboard.list?.saleProfitCount);
+  const data2 = useSelector((state) => state.dashboard.list?.products);
   const cardInformation = useSelector(
     (state) => state.dashboard.list?.cardInfo
   );
@@ -112,29 +122,61 @@ const DemoLine = () => {
     }
   };
 
-  return (
-    <Fragment>
-      <div className="row d-flex" style={{ maxWidth: "100%" }}>
-        <div className="col-md-3">
-          <RangePicker
-            onCalendarChange={onCalendarChange}
-            defaultValue={[startdate, enddate]}
-            className="range-picker"
+  if(hasPermission("professionalUser")){
+    return (
+      <Fragment>
+        <div className="row d-flex" style={{ maxWidth: "100%" }}>
+          <div className="col-md-3">
+            <RangePicker
+              onCalendarChange={onCalendarChange}
+              defaultValue={[startdate, enddate]}
+              className="range-picker"
+            />
+          </div>
+          <div className="col-md-9" style={{display:"flex", justifyContent:"flex-end", gap:"2%"}}>
+            <DueClientNotification list={dueClientList} />
+            <NotificationIcon list={list} />
+          </div>
+        </div>
+
+        <DashboardCard
+            information={total?._sum}
+            count={total?._count}
+            isCustomer={false}
           />
+          
+        <Card title="Achats vs Dettes">
+          {data2 ? <Line {...config} /> : <Loader />}
+        </Card>
+      </Fragment>
+    );
+  } else {
+    return (
+      <Fragment>
+        <div className="row d-flex" style={{ maxWidth: "100%" }}>
+          <div className="col-md-3">
+            <RangePicker
+              onCalendarChange={onCalendarChange}
+              defaultValue={[startdate, enddate]}
+              className="range-picker"
+            />
+          </div>
+          <div className="col-md-9" style={{display:"flex", justifyContent:"flex-end", gap:"2%"}}>
+            <DueClientNotification list={dueClientList} />
+            <NotificationIcon list={list} />
+          </div>
         </div>
-        <div className="col-md-9" style={{display:"flex", justifyContent:"flex-end", gap:"2%"}}>
-          <DueClientNotification list={dueClientList} />
-          <NotificationIcon list={list} />
-        </div>
-      </div>
 
-      <NewDashboardCard information={cardInformation} />
+          <NewDashboardCard information={cardInformation} />
 
-      <Card title="Ventes vs bénéfices">
-        {data ? <Line {...config} /> : <Loader />}
-      </Card>
-    </Fragment>
-  );
+        <Card title="Ventes vs bénéfices">
+          {data ? <Line {...config} /> : <Loader />}
+        </Card>
+      </Fragment>
+    );
+  }
+
+  
 };
 
 export default DemoLine;

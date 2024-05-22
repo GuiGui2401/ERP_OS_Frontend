@@ -14,7 +14,7 @@ const DashboardCard = ({ information, count, isCustomer, title }) => {
                   <div className="media d-flex">
                     <div className="media-body text-left">
                       <h3 className="">{count?.id ? count?.id : 0}</h3>
-                      <span className="">Facture</span>
+                      <span className="">Nombre de Facture</span>
                     </div>
                     <div className="align-self-center">
                       <i className="icon-cloud-download font-large-2 float-right"></i>

@@ -380,7 +380,21 @@ const AddPos = ({
           </Col>
           <Col span={24}>
             <Form.Item style={{ marginTop: "15px" }}>
+              {currentRole === "professionnel" ? (
               <Button
+                block
+                type="primary"
+                htmlType="submit"
+                loading={loader}
+                onClick={() => {
+                  onClickLoading();
+                  onFormSubmit();
+                }}
+              >
+                Achat Produit
+              </Button>
+             ) : (
+                <Button
                 block
                 type="primary"
                 htmlType="submit"
@@ -392,6 +406,7 @@ const AddPos = ({
               >
                 Vente Produit
               </Button>
+             )}
             </Form.Item>
           </Col>
         </Row>
